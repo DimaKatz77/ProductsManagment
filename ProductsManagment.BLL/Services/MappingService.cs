@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProductsManagment.BLL.Services
 {
+    //Static Mapping Class
     public static class MappingService
     {
         public static Product ProductDtoToProduct(ProductDto dto)

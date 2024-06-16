@@ -7,13 +7,14 @@ namespace ProductsManagment.BLL.Services
 {
     public class ProductValidation : IProductValidation
     {
+        //Valid input Data
         public ResultDetails IsValid<T>(T _product)
         {
             if (_product == null)
             {
                 return new ResultDetails(false, "Object is Null");
             }
-
+          //Check is Input Type is product or Catalog
             Type genericType = typeof(T);
             if (genericType == typeof(ProductDto))
                 return IsProductValid(_product as ProductDto);
@@ -26,7 +27,7 @@ namespace ProductsManagment.BLL.Services
         {
             if (_catalog.Products== null)
                 return new ResultDetails(true);
-
+            //Check Products Duplicate - A Catalog can’t include a duplicate Product with the same id.
             var duplicates = FindDuplicates(_catalog.Products);
             if (duplicates.Count()>0)
             {
@@ -37,7 +38,7 @@ namespace ProductsManagment.BLL.Services
 
         private ResultDetails IsProductValid(ProductDto _product)
         {
-
+            //Is 
             if (_product.Category is FreshProductDTO f)
                 return FreshMatch(f);
             else if (_product.Category is ElectricProductDTO e)
@@ -47,6 +48,9 @@ namespace ProductsManagment.BLL.Services
         }
 
         private List<string> FindDuplicates(IEnumerable<ProductDto> _products) {
+
+            // A Catalog can’t include a duplicate Product with the same id.
+
             var idCounts = new Dictionary<string, int>();
             foreach (var item in _products)
             {
@@ -75,6 +79,7 @@ namespace ProductsManagment.BLL.Services
 
         private ResultDetails VoltageAndSocketTypeMatch(ElectricProductDTO _category)
         {
+            //When adding a Product with the Electric category, validate that the voltage and socket type match. Matching rules are: 220v matching UK or EU sockets - 110v matching US socket
             if (_category.Voltage == Voltage._220V &&
                 (_category.SocketType == SocketType.UK || _category.SocketType == SocketType.EU))
                 return new ResultDetails(true);
@@ -87,6 +92,8 @@ namespace ProductsManagment.BLL.Services
 
         private ResultDetails FreshMatch(FreshProductDTO _category)
         {
+            //Products with the Fresh category can be added only if they have at least 7 days remaining until their expiry date - reference time check is UTC+0 at the time of product creation.
+
             if (_category.ExpiryDate > DateTime.UtcNow.AddDays(7))
             {
                 return new ResultDetails(true);
