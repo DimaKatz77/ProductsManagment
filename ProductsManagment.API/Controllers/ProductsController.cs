@@ -4,7 +4,6 @@ using ProductsManagment.Common.Common.Models;
 
 namespace ProductsManagment.API.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : Controller
