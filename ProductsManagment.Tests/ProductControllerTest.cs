@@ -1,14 +1,19 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using ProductsManagment.BLL.Services;
+using Xunit;
 
 namespace ProductsManagment.Tests
 {
-    public class ProductControllerTest
+    public class ProductControllerTest 
     {
-        private readonly HttpClient _client;
+      
+
+        [Fact]
+        public async Task GetAllProductsAsync_ShouldReturnAllProducts()
+        {
+            var service = new Mock<IProductService>
+        }
+
+
     }
 }

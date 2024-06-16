@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductsManagment.BLL.Services;
-using ProductsManagment.Common.Common.Enums;
-using ProductsManagment.DAL.Libs;
+using ProductsManagment.Common.Common.Models;
 
 namespace ProductsManagment.Controllers
 {
@@ -22,21 +21,9 @@ namespace ProductsManagment.Controllers
 
         //Create new Product
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Product _product)
+        public async Task<IActionResult> Post(ProductDto _product)
         {
-            _product = new Product
-            {
-                Category = new ElectricProduct
-                {
-                    SocketType = SocketType.UK,
-                    Voltage = Voltage._220V
-                },
-                Description = "MyTest",
-                IsActive = true,
-                Price = 45,
-                Title = ""
-            };
-            //Validate the 
+            //Validate the _product
             var _validationResult = _productValidation.IsValid(_product);
             if (!_validationResult.IsSuccess)
             {
@@ -54,12 +41,12 @@ namespace ProductsManagment.Controllers
         }
 
         //Update Product
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id,  [FromBody] Product _product)
+        [HttpPut]
+        public async Task<IActionResult> Put(ProductDto _product)
         {
-
             //Validate the 
             var _validationResult = _productValidation.IsValid(_product);
+
             if (!_validationResult.IsSuccess)
             {
                 return BadRequest(new ProblemDetails
@@ -70,7 +57,7 @@ namespace ProductsManagment.Controllers
                 });
             }
 
-            var product = await _productService.GetProductById(id);
+            var product = await _productService.GetProductById(_product.Id);
             if (product is null)
                 return NotFound();
 
@@ -78,14 +65,15 @@ namespace ProductsManagment.Controllers
             return NoContent();
         }
 
-        [HttpGet("{GetAll}")]
-        public async Task<IActionResult> Get()
+       // [Route("get-all")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
             var products = await _productService.GetAllProductsAsunc();
             return Ok(products);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-by-id/{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var product = await _productService.GetProductById(id);
@@ -102,30 +90,20 @@ namespace ProductsManagment.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetByPriceLimit/{priceLimit}")]
-        public IActionResult GetByPriceLimit(int priceLimit)
+        //[Route("get-by-price-limit")]
+        [HttpGet("max-price/{limit}")]
+        public IActionResult GetByPriceLimit(decimal limit)
         {
-            var products = _productService.GetProductsByPriceLimit(priceLimit);
+            var products = _productService.GetProductsByPriceLimit(limit);
             return Ok(products);
         }
 
-        [HttpGet("GetByCategory/{category}")]
-        public IActionResult GetByCategory(string category)
+       // [Route("get-by-category")]
+        [HttpGet("{category}")]
+        public IActionResult GetByCategory(ProductCategory category)
         {
-            IEnumerable<Product> products;
-            if (category == "fresh")
-                products = _productService.GetProductsByCategory<FreshProduct>();
-            else if (category == "electric")
-                products = _productService.GetProductsByCategory<ElectricProduct>();
-            else
-            {
-                return BadRequest(new ProblemDetails
-                {
-                    Title = "fresh - is Fresh Products, electric is Electric Product",
-                    Status = StatusCodes.Status400BadRequest,
-                    Detail = $"{category} is bad request category"
-                });
-            }
+            IEnumerable<ProductDto> products = _productService.GetProductsByCategory(category); ;
+
             return Ok(products);
         }
 

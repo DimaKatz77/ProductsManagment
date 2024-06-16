@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
-using ProductsManagment.Common.Common.Libs;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using ProductsManagment.Common.Common.Models;
+using ProductsManagment.DAL.Libs;
 using ProductsManagment.DAL.Repository;
+using System.Collections.Generic;
 
 namespace ProductsManagment.BLL.Services
 {
@@ -13,8 +17,9 @@ namespace ProductsManagment.BLL.Services
             _productRepository = productRepository;
         }
 
-        public async Task<string> CreateProductAsync(Product _product)
+        public async Task<string> CreateProductAsync(ProductDto _productDto)
         {
+            Product _product = MappingService.ProductDtoToProduct(_productDto);
             await _productRepository.InsertOneAsync(_product);
             return _product.Id.ToString();
         }
@@ -24,30 +29,54 @@ namespace ProductsManagment.BLL.Services
             await _productRepository.DeleteByIdAsync(_id);
         }
 
-        public async Task UpdateProductAsync(Product _product)
+        public async Task UpdateProductAsync(ProductDto _productDto)
         {
+            Product _product = MappingService.ProductDtoToProduct(_productDto);
             await _productRepository.ReplaceOneAsync(_product);
         }
 
-        public async Task<IEnumerable<Product>> GetAllProductsAsunc()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsunc()
         {
-            return await _productRepository.FindAllAsync();
+            var products = await _productRepository.FindAllAsync();
+            var dtoList = products.Select(x => MappingService.ProductToProductDTO(x));
+            return dtoList;
         }
 
-        public async Task<Product> GetProductById(string id)
+        public async Task<ProductDto> GetProductById(string id)
         {
-            return await _productRepository.FindByIdAsync(id);
+            return MappingService.ProductToProductDTO(await _productRepository.FindByIdAsync(id));
         }
 
-        public IEnumerable<Product> GetProductsByCategory<T>()
+        public IEnumerable<ProductDto> GetProductsByCategory(ProductCategory category)
         {
-            return   _productRepository.FilterBy(c => c.Category is T);
+            IEnumerable<Product> products = new List<Product>();
+            switch (category)
+            {
+                case ProductCategory.fresh:
+                    products = _productRepository.FilterBy(c => c.Category is FreshProduct);
+                    break;
+                case ProductCategory.electric:
+                    products = _productRepository.FilterBy(c => c.Category is ElectricProduct);
+                    break;
+                default:
+                    products = null;
+                    break;
+            }
+            
+            var dtoList = products.Select(x => MappingService.ProductToProductDTO(x));
+            return dtoList;
         }
 
-        public IEnumerable<Product> GetProductsByPriceLimit(decimal _price)
+        public IEnumerable<ProductDto> GetProductsByPriceLimit(decimal _price)
         {
-            return _productRepository.FilterBy(filter => filter.Price < _price);
+            var products = _productRepository.FilterBy(filter => filter.Price <= _price);
+            var dtoList = products.Select(x => MappingService.ProductToProductDTO(x));
+            return dtoList;
         }
 
+        public IEnumerable<ProductDto> GetProductsByCategory()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using ProductsManagment.Common.Common;
-using ProductsManagment.Common.Common.Libs;
+using ProductsManagment.DAL.Libs;
 using System.Linq.Expressions;
 
 namespace ProductsManagment.DAL.Repository

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProductsManagment.Common.Common.DTO
+namespace ProductsManagment.Common.Common.Models
 {
-    internal class ElectricProductDTO  : CategoryDto
+    public enum ProductCategory
     {
+        fresh = 1,
+        electric = 2
     }
 }

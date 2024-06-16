@@ -1,15 +1,15 @@
-﻿using ProductsManagment.Common.Common.Libs;
+﻿using ProductsManagment.Common.Common.Models;
 
 namespace ProductsManagment.BLL.Services
 {
     public interface IProductService
     {
-        Task<string> CreateProductAsync(Product _product);
-        Task<IEnumerable<Product>> GetAllProductsAsunc();
-        Task<Product> GetProductById(string id);
-        IEnumerable<Product> GetProductsByCategory<T>();
-        IEnumerable<Product> GetProductsByPriceLimit(decimal _price);
-        Task UpdateProductAsync(Product _product);
+        Task<string> CreateProductAsync(ProductDto _product);
+        Task<IEnumerable<ProductDto>> GetAllProductsAsunc();
+        Task<ProductDto> GetProductById(string _id);
+        IEnumerable<ProductDto> GetProductsByCategory(ProductCategory _category);
+        IEnumerable<ProductDto> GetProductsByPriceLimit(decimal _price);
+        Task UpdateProductAsync(ProductDto _product);
         Task DeleteProductAsync(string _id);
 
 

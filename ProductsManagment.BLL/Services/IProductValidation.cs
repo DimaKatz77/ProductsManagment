@@ -1,12 +1,9 @@
-﻿
-
-using ProductsManagment.Common.Common;
-using ProductsManagment.Common.Common.Libs;
+﻿using ProductsManagment.Common.Common;
 
 namespace ProductsManagment.BLL.Services
 {
     public interface IProductValidation
     {
-        ResultDetails IsValid(Product _product);
+        ResultDetails IsValid<T>(T _obj);
     }
 }

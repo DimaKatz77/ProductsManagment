@@ -2,7 +2,7 @@
 
 namespace ProductsManagment.DAL.Libs
 {
-    [BsonCollection("catalog")]
+    [BsonCollection("Catalog")]
     public class Catalog : Document
     {
         [BsonElement("title")]

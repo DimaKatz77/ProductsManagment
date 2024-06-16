@@ -1,19 +1,18 @@
-﻿
-using ProductsManagment.Common.Common.Libs;
+﻿using ProductsManagment.Common.Common.Models;
 
 namespace ProductsManagment.BLL.Services
 {
     public interface ICatalogService
     {
-        Task<string> CreateCatalog(Catalog _catalog);
+        Task<string> CreateCatalog(CatalogDto _catalog);
 
-        Task<IEnumerable<Catalog>> GetAllCatalogsAsunc();
+        Task<IEnumerable<CatalogDto>> GetAllCatalogsAsunc();
 
-        Task<Catalog> GetCatalogById(string _id);
+        Task<CatalogDto> GetCatalogById(string _id);
 
-        IEnumerable<Catalog> GetAllCatalogsByProductId(string _id);
+        IEnumerable<CatalogDto> GetAllCatalogsByProductId(string _id);
 
-        Task UpdateCatalogAsync(Catalog _catalog);
+        Task UpdateCatalogAsync(CatalogDto _catalog);
 
         Task DeleteCatalogAsync(string _id);
     }

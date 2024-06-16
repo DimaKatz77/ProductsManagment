@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductsManagment.BLL.Services;
 using ProductsManagment.Common.Common.Enums;
-using ProductsManagment.Common.Common.Libs;
+using ProductsManagment.Common.Common.Models;
+using ProductsManagment.DAL.Libs;
 
 namespace ProductsManagment.Controllers
 {
@@ -11,33 +12,44 @@ namespace ProductsManagment.Controllers
     public class CatalogController : Controller
     {
         private readonly ICatalogService _catalogService;
+        private readonly IProductValidation _productValidation;
 
-        public CatalogController(ICatalogService catalogService)
+        public CatalogController(
+            ICatalogService catalogService, 
+            IProductValidation productValidation)
         {
             _catalogService = catalogService;
+            _productValidation = productValidation;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Catalog _catalog)
+        public async Task<IActionResult> Post(CatalogDto _catalog)
         {
-            _catalog = new Catalog
+            //Validate the _product
+            var _validationResult = _productValidation.IsValid(_catalog);
+            if (!_validationResult.IsSuccess)
             {
-               Title = "Cat1",
-            };
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Is Not Valid a Product",
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = _validationResult.Message
+                });
+            }
 
             string _catalogId = await _catalogService.CreateCatalog(_catalog);
 
             return Ok(_catalogId);
         }
 
-        [HttpGet("{GetAll}")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var catalogs = await _catalogService.GetAllCatalogsAsunc();
             return Ok(catalogs);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get-by-id{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var _catalog = await _catalogService.GetCatalogById(id);
@@ -54,25 +66,20 @@ namespace ProductsManagment.Controllers
             return NoContent();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         //Update Product
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody] Product _product)
+        [HttpPut]
+        public async Task<IActionResult> Put(CatalogDto _catalog)
         {
-            var _catalog = await _catalogService.GetCatalogById(id);
-            if (_catalog is null)
+            var catalog = await _catalogService.GetCatalogById(_catalog.Id);
+            if (catalog is null)
                 return NotFound();
 
             await _catalogService.UpdateCatalogAsync(_catalog);
             return NoContent();
         }
 
-        [HttpGet("GetByProductId/{productId}")]
-        public  IActionResult GetByPriceLimit(string productId)
+        [HttpGet("get-by-product-id/{productId}")]
+        public  IActionResult GetByProductId(string productId)
         {
             var products =  _catalogService.GetAllCatalogsByProductId(productId);
             return Ok(products);

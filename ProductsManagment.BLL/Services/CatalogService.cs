@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
-using ProductsManagment.Common.Common.Libs;
+using ProductsManagment.Common.Common.Models;
+using ProductsManagment.DAL.Libs;
 using ProductsManagment.DAL.Repository;
 
 namespace ProductsManagment.BLL.Services
@@ -13,10 +14,11 @@ namespace ProductsManagment.BLL.Services
             _catalogRepository = catalogRepository;
         }
 
-        public async Task<string> CreateCatalog(Catalog _catalog)
+        public async Task<string> CreateCatalog(CatalogDto _catalogDto)
         {
-            await _catalogRepository.InsertOneAsync(_catalog);
-            return _catalog.Id.ToString();
+            var catalog = MappingService.CatalogDtoToCatalog(_catalogDto);
+            await _catalogRepository.InsertOneAsync(catalog);
+            return catalog.Id.ToString();
         }
 
         public async Task DeleteCatalogAsync(string _id)
@@ -24,30 +26,34 @@ namespace ProductsManagment.BLL.Services
             await _catalogRepository.DeleteByIdAsync(_id);
         }
 
-        public async Task<IEnumerable<Catalog>> GetAllCatalogsAsunc()
+        public async Task<IEnumerable<CatalogDto>> GetAllCatalogsAsunc()
         {
-            return await _catalogRepository.FindAllAsync();
+            var catalogs = await _catalogRepository.FindAllAsync();
+            var dtoList = catalogs.Select(x => MappingService.CatalogToCatalogDto(x));
+            return dtoList;
         }
 
-        public IEnumerable<Catalog> GetAllCatalogsByProductId(string _id)
+        public IEnumerable<CatalogDto> GetAllCatalogsByProductId(string _id)
         {
             Product prod = new Product
             {
                 Id = new ObjectId(_id),
             };
-            return _catalogRepository.FilterBy(filter => filter.Products.Contains(prod));
+            var catalogs  = _catalogRepository.FilterBy(filter => filter.Products.Contains(prod));
+            var dtoList = catalogs.Select(x => MappingService.CatalogToCatalogDto(x));
+            return dtoList;
         }
 
-        public async Task<Catalog> GetCatalogById(string id)
+        public async Task<CatalogDto> GetCatalogById(string id)
         {
-            return await _catalogRepository.FindByIdAsync(id);
+            var catalog  =  await _catalogRepository.FindByIdAsync(id);
+            return MappingService.CatalogToCatalogDto(catalog);
         }
 
-        public async Task UpdateCatalogAsync(Catalog _catalog)
+        public async Task UpdateCatalogAsync(CatalogDto _catalogDto)
         {
-            await _catalogRepository.ReplaceOneAsync(_catalog);
+            var catalog =  MappingService.CatalogDtoToCatalog(_catalogDto);
+            await _catalogRepository.ReplaceOneAsync(catalog);
         }
-
-
     }
 }
