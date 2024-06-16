@@ -35,7 +35,6 @@ namespace ProductsManagment.BLL.Services
             return new ResultDetails(true);
         }
 
-
         private ResultDetails IsProductValid(ProductDto _product)
         {
 

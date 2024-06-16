@@ -1,4 +1,5 @@
-﻿using ProductsManagment.DAL.Libs;
+﻿using MongoDB.Driver;
+using ProductsManagment.DAL.Libs;
 using System.Linq.Expressions;
 
 namespace ProductsManagment.DAL.Repository
@@ -12,6 +13,7 @@ namespace ProductsManagment.DAL.Repository
         Task ReplaceOneAsync(TDocument document);
         IEnumerable<TDocument> FilterBy(
         Expression<Func<TDocument, bool>> filterExpression);
+        IEnumerable<TDocument> FilterBy(FilterDefinition<TDocument>? filter);
 
     }
 }

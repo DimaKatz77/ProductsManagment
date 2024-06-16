@@ -73,10 +73,5 @@ namespace ProductsManagment.BLL.Services
             var dtoList = products.Select(x => MappingService.ProductToProductDTO(x));
             return dtoList;
         }
-
-        public IEnumerable<ProductDto> GetProductsByCategory()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

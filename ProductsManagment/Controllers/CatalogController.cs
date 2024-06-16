@@ -49,7 +49,7 @@ namespace ProductsManagment.API.Controllers
             return Ok(catalogs);
         }
 
-        [HttpGet("get-by-id{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var _catalog = await _catalogService.GetCatalogById(id);
@@ -70,6 +70,17 @@ namespace ProductsManagment.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Put(CatalogDto _catalog)
         {
+            var _validationResult = _productValidation.IsValid(_catalog);
+            if (!_validationResult.IsSuccess)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Is Not Valid a Product",
+                    Status = StatusCodes.Status400BadRequest,
+                    Detail = _validationResult.Message
+                });
+            }
+
             var catalog = await _catalogService.GetCatalogById(_catalog.Id);
             if (catalog is null)
                 return NotFound();

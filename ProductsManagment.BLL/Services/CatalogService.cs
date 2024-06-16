@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using ProductsManagment.Common.Common.Models;
 using ProductsManagment.DAL.Libs;
 using ProductsManagment.DAL.Repository;
@@ -35,11 +36,9 @@ namespace ProductsManagment.BLL.Services
 
         public IEnumerable<CatalogDto> GetAllCatalogsByProductId(string _id)
         {
-            Product prod = new Product
-            {
-                Id = new ObjectId(_id),
-            };
-            var catalogs  = _catalogRepository.FilterBy(filter => filter.Products.Contains(prod));
+            var id = new ObjectId(_id);
+            var filter = Builders<Catalog>.Filter.ElemMatch(p => p.Products, item => item.Id == id);
+            var catalogs  = _catalogRepository.FilterBy(filter);
             var dtoList = catalogs.Select(x => MappingService.CatalogToCatalogDto(x));
             return dtoList;
         }

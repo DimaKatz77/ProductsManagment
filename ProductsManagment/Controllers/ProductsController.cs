@@ -18,8 +18,6 @@ namespace ProductsManagment.API.Controllers
             _productValidation = productValidation;
         }
 
-
-        //Create new Product
         [HttpPost]
         public async Task<IActionResult> Post(ProductDto _product)
         {
@@ -40,7 +38,6 @@ namespace ProductsManagment.API.Controllers
             return Ok(_productId);
         }
 
-        //Update Product
         [HttpPut]
         public async Task<IActionResult> Put(ProductDto _product)
         {
@@ -65,7 +62,6 @@ namespace ProductsManagment.API.Controllers
             return NoContent();
         }
 
-        // [Route("get-all")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
@@ -73,7 +69,7 @@ namespace ProductsManagment.API.Controllers
             return Ok(products);
         }
 
-        [HttpGet("get-by-id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var product = await _productService.GetProductById(id);
@@ -90,16 +86,14 @@ namespace ProductsManagment.API.Controllers
             return NoContent();
         }
 
-        //[Route("get-by-price-limit")]
-        [HttpGet("max-price/{limit}")]
+        [HttpGet("price-limit/{limit}")]
         public IActionResult GetByPriceLimit(decimal limit)
         {
             var products = _productService.GetProductsByPriceLimit(limit);
             return Ok(products);
         }
 
-        // [Route("get-by-category")]
-        [HttpGet("{category}")]
+        [HttpGet("by-category{category}")]
         public IActionResult GetByCategory(ProductCategory category)
         {
             IEnumerable<ProductDto> products = _productService.GetProductsByCategory(category); ;

@@ -68,6 +68,11 @@ namespace ProductsManagment.DAL.Repository
         {
             return _collection.Find(filterExpression).ToEnumerable();
         }
+
+        public virtual IEnumerable<TDocument> FilterBy(FilterDefinition<TDocument>? filter)
+        {
+            return _collection.Find(filter).ToEnumerable();
+        }
     }
 
 
