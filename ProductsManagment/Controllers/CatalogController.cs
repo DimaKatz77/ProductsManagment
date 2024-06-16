@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductsManagment.BLL.Services;
 using ProductsManagment.Common.Common.Enums;
-using ProductsManagment.DAL.Libs;
+using ProductsManagment.Common.Common.Libs;
 
 namespace ProductsManagment.Controllers
 {
