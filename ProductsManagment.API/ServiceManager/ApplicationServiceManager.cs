@@ -7,7 +7,6 @@ namespace ProductsManagment.API.ServiceManager
     {
         public static IServiceCollection AddProviderSettings(this IServiceCollection services, IConfiguration configuration)
         {
-            //Api Settings 
             var api_section = configuration.GetSection($"DatabaseSettings");
 
             var _providerSettingsConfig = api_section.Get<DBSettings>();
