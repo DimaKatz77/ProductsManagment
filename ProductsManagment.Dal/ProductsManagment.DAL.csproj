@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Common\ProductsManagment.Common.csproj" />
     <ProjectReference Include="..\ProductsManagment.Common\ProductsManagment.Common.csproj" />
   </ItemGroup>
 
