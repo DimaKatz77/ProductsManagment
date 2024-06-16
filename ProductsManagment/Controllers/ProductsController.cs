@@ -2,7 +2,7 @@
 using ProductsManagment.BLL.Services;
 using ProductsManagment.Common.Common.Models;
 
-namespace ProductsManagment.Controllers
+namespace ProductsManagment.API.Controllers
 {
 
     [Route("api/[controller]")]
@@ -65,7 +65,7 @@ namespace ProductsManagment.Controllers
             return NoContent();
         }
 
-       // [Route("get-all")]
+        // [Route("get-all")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> Get()
         {
@@ -98,7 +98,7 @@ namespace ProductsManagment.Controllers
             return Ok(products);
         }
 
-       // [Route("get-by-category")]
+        // [Route("get-by-category")]
         [HttpGet("{category}")]
         public IActionResult GetByCategory(ProductCategory category)
         {

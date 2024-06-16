@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 
-namespace ProductsManagment.ErrorHandling.Middleware
+namespace ProductsManagment.API.ErrorHandling.Middleware
 {
     public class ErrorHandling
     {

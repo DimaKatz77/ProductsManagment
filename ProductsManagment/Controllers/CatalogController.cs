@@ -4,7 +4,7 @@ using ProductsManagment.Common.Common.Enums;
 using ProductsManagment.Common.Common.Models;
 using ProductsManagment.DAL.Libs;
 
-namespace ProductsManagment.Controllers
+namespace ProductsManagment.API.Controllers
 {
 
     [Route("api/[controller]")]
@@ -15,7 +15,7 @@ namespace ProductsManagment.Controllers
         private readonly IProductValidation _productValidation;
 
         public CatalogController(
-            ICatalogService catalogService, 
+            ICatalogService catalogService,
             IProductValidation productValidation)
         {
             _catalogService = catalogService;
@@ -79,9 +79,9 @@ namespace ProductsManagment.Controllers
         }
 
         [HttpGet("get-by-product-id/{productId}")]
-        public  IActionResult GetByProductId(string productId)
+        public IActionResult GetByProductId(string productId)
         {
-            var products =  _catalogService.GetAllCatalogsByProductId(productId);
+            var products = _catalogService.GetAllCatalogsByProductId(productId);
             return Ok(products);
         }
 

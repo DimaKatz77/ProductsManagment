@@ -1,10 +1,10 @@
 using ProductsManagment.BLL.Services;
 using ProductsManagment.DAL.Repository;
-using ProductsManagment.ErrorHandling.Middleware;
-using ProductsManagment.ServiceManager;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using ProductsManagment.Common;
+using ProductsManagment.API.ErrorHandling.Middleware;
+using ProductsManagment.API.ServiceManager;
 
 var builder = WebApplication.CreateBuilder(args);
 
