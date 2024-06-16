@@ -1,10 +1,12 @@
-﻿using ProductsManagment.ErrorHandling.Middleware;
-using ProductsManagment.Models.DTO;
+﻿
+
+using ProductsManagment.Common.Common;
+using ProductsManagment.DAL.Libs;
 
 namespace ProductsManagment.BLL.Services
 {
     public interface IProductValidation
     {
-        ResultDetails IsValid(ProductDTO _product);
+        ResultDetails IsValid(Product _product);
     }
 }

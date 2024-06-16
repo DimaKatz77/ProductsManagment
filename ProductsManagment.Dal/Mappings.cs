@@ -3,7 +3,7 @@ using ProductsManagment.DAL.Libs;
 
 namespace ProductsManagment.DAL
 {
-    public static class MongoDBClassMap
+    public static class Mappings
     {
         public static void RegisterClassMaps()
         {

@@ -1,25 +1,21 @@
 ﻿using AutoMapper;
 using ProductsManagment.DAL.Libs;
 using ProductsManagment.DAL.Repository;
-using ProductsManagment.Models.DTO;
 
 namespace ProductsManagment.BLL.Services
 {
     public class ProductService : IProductService
     {
         private readonly IMongoRepository<Product> _productRepository;
-        private readonly IMapper _mapper;
 
-        public ProductService(IMongoRepository<Product> productRepository, IMapper mapper)
+        public ProductService(IMongoRepository<Product> productRepository)
         {
             _productRepository = productRepository;
-            _mapper = mapper;
         }
 
-        public async Task<string> CreateProductAsync(ProductDTO _product)
+        public async Task<string> CreateProductAsync(Product _product)
         {
-            var item = _mapper.Map<Product>(_product);
-            await _productRepository.InsertOneAsync(item);
+            await _productRepository.InsertOneAsync(_product);
             return _product.Id.ToString();
         }
 
@@ -28,34 +24,29 @@ namespace ProductsManagment.BLL.Services
             await _productRepository.DeleteByIdAsync(_id);
         }
 
-        public async Task UpdateProductAsync(ProductDTO _product)
+        public async Task UpdateProductAsync(Product _product)
         {
-            var item = _mapper.Map<Product>(_product);
-            await _productRepository.ReplaceOneAsync(item);
+            await _productRepository.ReplaceOneAsync(_product);
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllProductsAsunc()
+        public async Task<IEnumerable<Product>> GetAllProductsAsunc()
         {
-            var items = await _productRepository.FindAllAsync();
-            return _mapper.Map<IEnumerable<ProductDTO>>(items);
+            return await _productRepository.FindAllAsync();
         }
 
-        public async Task<ProductDTO> GetProductById(string id)
+        public async Task<Product> GetProductById(string id)
         {
-            var item = await _productRepository.FindByIdAsync(id);
-            return _mapper.Map<ProductDTO>(item);
+            return await _productRepository.FindByIdAsync(id);
         }
 
-        public IEnumerable<ProductDTO> GetProductsByCategory<T>()
+        public IEnumerable<Product> GetProductsByCategory<T>()
         {
-            var items =  _productRepository.FilterBy(c => c.Category is T);
-            return _mapper.Map<IEnumerable<ProductDTO>>(items);
+            return   _productRepository.FilterBy(c => c.Category is T);
         }
 
-        public IEnumerable<ProductDTO> GetProductsByPriceLimit(decimal _price)
+        public IEnumerable<Product> GetProductsByPriceLimit(decimal _price)
         {
-            var items = _productRepository.FilterBy(filter => filter.Price < _price);
-            return _mapper.Map<IEnumerable<ProductDTO>>(items);
+            return _productRepository.FilterBy(filter => filter.Price < _price);
         }
 
     }

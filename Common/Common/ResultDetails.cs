@@ -1,4 +1,4 @@
-﻿namespace ProductsManagment.ErrorHandling.Middleware
+﻿namespace ProductsManagment.Common.Common
 {
     public class ResultDetails
     {

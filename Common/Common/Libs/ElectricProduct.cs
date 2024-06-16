@@ -1,5 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
-using ProductsManagment.DAL.Libs.Enums;
+using ProductsManagment.Common.Common.Enums;
 
 namespace ProductsManagment.DAL.Libs
 {

@@ -1,35 +1,35 @@
-﻿using ProductsManagment.DAL.Libs;
-using ProductsManagment.DAL.Libs.Enums;
-using ProductsManagment.ErrorHandling.Middleware;
-using ProductsManagment.Models.DTO;
+﻿
+using ProductsManagment.Common.Common;
+using ProductsManagment.Common.Common.Enums;
+using ProductsManagment.DAL.Libs;
 
 namespace ProductsManagment.BLL.Services
 {
     public class ProductValidation : IProductValidation
     {
-        public ResultDetails IsValid(ProductDTO _product)
+        public ResultDetails IsValid(Product _product)
         {
-            if (_product.Category is FreshProductDTO f)
+            if (_product.Category is FreshProduct f)
                 return FreshMatch(f);
-            else if (_product.Category is ElectricProductDTO e)
+            else if (_product.Category is ElectricProduct e)
                 return VoltageAndSocketTypeMatch(e);
 
             return new ResultDetails(true);
         }
 
-        private ResultDetails VoltageAndSocketTypeMatch(ElectricProductDTO _category)
+        private ResultDetails VoltageAndSocketTypeMatch(ElectricProduct _category)
         {
-            if (_category.Voltage == VoltageDTO._220V &&
-                (_category.SocketType == SocketTypeDTO.UK || _category.SocketType == SocketTypeDTO.EU))
+            if (_category.Voltage == Voltage._220V &&
+                (_category.SocketType == SocketType.UK || _category.SocketType == SocketType.EU))
                 return new ResultDetails(true);
 
-            else if (_category.Voltage == VoltageDTO._110V && _category.SocketType == SocketTypeDTO.US)
+            else if (_category.Voltage == Voltage._110V && _category.SocketType == SocketType.US)
                 return new ResultDetails(true);
 
             return new ResultDetails(false, $"The Voltage {_category.Voltage} are not match to SocketType {_category.SocketType}");
         }
 
-        private ResultDetails FreshMatch(FreshProductDTO _category)
+        private ResultDetails FreshMatch(FreshProduct _category)
         {
             if (_category.ExpiryDate > DateTime.UtcNow.AddDays(7))
             {

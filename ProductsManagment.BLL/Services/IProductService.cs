@@ -1,16 +1,15 @@
 ﻿using ProductsManagment.DAL.Libs;
-using ProductsManagment.Models.DTO;
 
 namespace ProductsManagment.BLL.Services
 {
     public interface IProductService
     {
-        Task<string> CreateProductAsync(ProductDTO _product);
-        Task<IEnumerable<ProductDTO>> GetAllProductsAsunc();
-        Task<ProductDTO> GetProductById(string id);
-        IEnumerable<ProductDTO> GetProductsByCategory<T>();
-        IEnumerable<ProductDTO> GetProductsByPriceLimit(decimal _price);
-        Task UpdateProductAsync(ProductDTO _product);
+        Task<string> CreateProductAsync(Product _product);
+        Task<IEnumerable<Product>> GetAllProductsAsunc();
+        Task<Product> GetProductById(string id);
+        IEnumerable<Product> GetProductsByCategory<T>();
+        IEnumerable<Product> GetProductsByPriceLimit(decimal _price);
+        Task UpdateProductAsync(Product _product);
         Task DeleteProductAsync(string _id);
 
 

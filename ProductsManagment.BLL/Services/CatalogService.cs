@@ -29,7 +29,7 @@ namespace ProductsManagment.BLL.Services
             return await _catalogRepository.FindAllAsync();
         }
 
-        public IEnumerable<Catalog> GetAllCatalogsByProductIdAsunc(string _id)
+        public IEnumerable<Catalog> GetAllCatalogsByProductId(string _id)
         {
             Product prod = new Product
             {

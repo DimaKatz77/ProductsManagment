@@ -1,5 +1,6 @@
 ﻿
 using ProductsManagment.Common.Common;
+using ProductsManagment.DAL;
 
 namespace ProductsManagment.ServiceManager
 {
@@ -14,7 +15,7 @@ namespace ProductsManagment.ServiceManager
 
             services.AddSingleton<DBSettings>(_providerSettingsConfig);
 
-            //MongoDBClassMap.RegisterClassMaps();
+            Mappings.RegisterClassMaps();
 
             return services;
         }

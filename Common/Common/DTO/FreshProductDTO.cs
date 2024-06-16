@@ -1,7 +1,12 @@
-﻿namespace ProductsManagment.Models.DTO
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProductsManagment.Common.Common.DTO
 {
-    public class FreshProductDTO : CategoryDto
+    internal class FreshProductDTO : CategoryDto
     {
-        public DateTime ExpiryDate { get; set; }
     }
 }

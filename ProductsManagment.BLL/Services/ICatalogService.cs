@@ -11,7 +11,7 @@ namespace ProductsManagment.BLL.Services
 
         Task<Catalog> GetCatalogById(string _id);
 
-        IEnumerable<Catalog> GetAllCatalogsByProductIdAsunc(string _id);
+        IEnumerable<Catalog> GetAllCatalogsByProductId(string _id);
 
         Task UpdateCatalogAsync(Catalog _catalog);
 

@@ -1,11 +1,12 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace ProductsManagment.Models.DTO
+namespace ProductsManagment.Common.Common.DTO
 {
-    public class ElectricProductDTO : CategoryDto
+    internal class ElectricProductDTO  : CategoryDto
     {
-        public SocketTypeDTO SocketType { get; set; }
-
-        public VoltageDTO Voltage { get; set; }
     }
 }

@@ -1,30 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.Primitives;
 using ProductsManagment.BLL.Services;
-using ProductsManagment.Models;
-using ProductsManagment.Models.DTO;
-using System.ComponentModel.DataAnnotations;
+using ProductsManagment.Common.Common.Enums;
+using ProductsManagment.DAL.Libs;
 
 namespace ProductsManagment.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : Controller
+    public class ProductsController : Controller
     {
         private readonly IProductService _productService;
         private readonly IProductValidation _productValidation;
 
-        public ProductController(IProductService productService)
+        public ProductsController(IProductService productService, IProductValidation productValidation)
         {
             _productService = productService;
+            _productValidation = productValidation;
         }
+
 
         //Create new Product
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ProductDTO _product)
+        public async Task<IActionResult> Post([FromBody] Product _product)
         {
+            _product = new Product
+            {
+                Category = new ElectricProduct
+                {
+                    SocketType = SocketType.UK,
+                    Voltage = Voltage._220V
+                },
+                Description = "MyTest",
+                IsActive = true,
+                Price = 45,
+                Title = ""
+            };
             //Validate the 
             var _validationResult = _productValidation.IsValid(_product);
             if (!_validationResult.IsSuccess)
@@ -44,7 +55,7 @@ namespace ProductsManagment.Controllers
 
         //Update Product
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id,  [FromBody] ProductDTO _product)
+        public async Task<IActionResult> Put(string id,  [FromBody] Product _product)
         {
 
             //Validate the 
@@ -64,10 +75,10 @@ namespace ProductsManagment.Controllers
                 return NotFound();
 
             await _productService.UpdateProductAsync(_product);
-            return Ok();
+            return NoContent();
         }
 
-        [HttpGet]
+        [HttpGet("{GetAll}")]
         public async Task<IActionResult> Get()
         {
             var products = await _productService.GetAllProductsAsunc();
@@ -75,9 +86,9 @@ namespace ProductsManagment.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string _id)
+        public async Task<IActionResult> Get(string id)
         {
-            var product = await _productService.GetProductById(_id);
+            var product = await _productService.GetProductById(id);
             if (product is null)
                 return NotFound();
 
@@ -85,34 +96,34 @@ namespace ProductsManagment.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string _id)
+        public async Task<IActionResult> Delete(string id)
         {
-            await _productService.DeleteProductAsync(_id);
+            await _productService.DeleteProductAsync(id);
             return NoContent();
         }
 
-        [HttpGet("{priceLimit}")]
-        public IActionResult GetByPriceLimit(int _priceLimit)
+        [HttpGet("GetByPriceLimit/{priceLimit}")]
+        public IActionResult GetByPriceLimit(int priceLimit)
         {
-            var products = _productService.GetProductsByPriceLimit(_priceLimit);
+            var products = _productService.GetProductsByPriceLimit(priceLimit);
             return Ok(products);
         }
 
-        [HttpGet("{category}")]
-        public IActionResult GetByCategory(string _category)
+        [HttpGet("GetByCategory/{category}")]
+        public IActionResult GetByCategory(string category)
         {
-            IEnumerable<ProductDTO> products;
-            if (_category == "fresh")
-                products = _productService.GetProductsByCategory<FreshProductDTO>();
-            else if (_category == "electric")
-                products = _productService.GetProductsByCategory<ElectricProductDTO>();
+            IEnumerable<Product> products;
+            if (category == "fresh")
+                products = _productService.GetProductsByCategory<FreshProduct>();
+            else if (category == "electric")
+                products = _productService.GetProductsByCategory<ElectricProduct>();
             else
             {
                 return BadRequest(new ProblemDetails
                 {
                     Title = "fresh - is Fresh Products, electric is Electric Product",
                     Status = StatusCodes.Status400BadRequest,
-                    Detail = $"{_category} is bad request category"
+                    Detail = $"{category} is bad request category"
                 });
             }
             return Ok(products);
